@@ -1,0 +1,30 @@
+.App {
+  text-align: center;
+}
+
+.cards {
+  display: flex;
+  flex-flow: row wrap;
+  border: solid black;
+}
+
+.card {
+  display: flex;
+  width: 10vw;
+  flex-flow: column nowrap;
+  border: solid black;
+  margin: 10px;
+}
+
+.nav {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  align-items: center;
+  border: solid black;
+}
+
+.hand-cards {
+  border: solid black;
+  margin: 5px;
+}
