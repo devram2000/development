@@ -19,7 +19,6 @@ export default class AlteredList extends React.Component {
       description: "All",
       color: "All",
       sort: "None",
-      hand: []
     };
 
   }
@@ -95,7 +94,7 @@ export default class AlteredList extends React.Component {
     }
   }
 
-  matchesFilterColor= item => {
+  matchesFilterColor = item => {
     // all items should be shown when no filter is selected
     if (this.state.color === "All") {
       return true
@@ -116,12 +115,8 @@ export default class AlteredList extends React.Component {
     }
   }
 
-  isInHand = item => {
-    return !this.state.hand.includes(item)
-  }
-
   matchesFilter = item => {
-    return this.filterChecker(this.state.suit, item.suit) && this.filterChecker(this.state.description, item.description) && this.filterChecker(this.state.color, item.color) && this.isInHand(item)
+    return this.filterChecker(this.state.suit, item.suit) && this.filterChecker(this.state.description, item.description) && this.filterChecker(this.state.color, item.color) && this.props.isInHand(item)
   }
 
   matchesSort = (item1, item2) => {
@@ -134,24 +129,6 @@ export default class AlteredList extends React.Component {
     }
   }
 
-  removeFromHand = (card) => {
-    this.setState({
-      hand: this.state.hand.filter((c) => c !== card)
-    })
-  }
-
-  addToHand = (card) => {
-    this.setState({
-      hand: [...this.state.hand, card]
-    })
-  }
-
-  resetHand = () => {
-    this.setState({
-      hand: []
-    })
-  }
-
   removeChanges = () => {
     this.setState({
       suit: "All",
@@ -162,63 +139,78 @@ export default class AlteredList extends React.Component {
   }
 
   shuffleDeck = () => {
-    this.removeFromHand()
+    this.removeChanges()
     this.props.shuffle()
   }
 
 
   render() {
     return (
-      <div>
+      <div className="main-row">
+        <div className="main-hand">
+          <DisplayHand hand={this.props.hand} removeFromHand={this.props.removeFromHand} resetHand={this.props.resetHand} />
+        </div>
+        <div>
+          <div className="main-alter">
+            <div className="main-column">
+              <Nav className="nav" variant="pills" >
+                <p>Description Filter:</p>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="All" onSelect={this.onSelectFilterDesc}>All</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Two" onSelect={this.onSelectFilterDesc}>Two</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Three" onSelect={this.onSelectFilterDesc}>Three</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Four" onSelect={this.onSelectFilterDesc}>Four</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Five" onSelect={this.onSelectFilterDesc}>Five</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Six" onSelect={this.onSelectFilterDesc}>Six</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Seven" onSelect={this.onSelectFilterDesc}>Seven</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Eight" onSelect={this.onSelectFilterDesc}>Eight</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Nine" onSelect={this.onSelectFilterDesc}>Nine</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Ten" onSelect={this.onSelectFilterDesc}>Ten</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Jack" onSelect={this.onSelectFilterDesc}>Jack</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Queen" onSelect={this.onSelectFilterDesc}>Queen</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="King" onSelect={this.onSelectFilterDesc}>King</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Ace" onSelect={this.onSelectFilterDesc}>Ace</Nav.Link></Nav.Item>
+              </Nav>
 
-        <DisplayHand hand={this.state.hand} removeFromHand={this.removeFromHand} resetHand={this.resetHand} />
+              <Nav className="nav">
+                <p>Suit Filter:</p>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="All" onSelect={this.onSelectFilterSuit}>All</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Diamond" onSelect={this.onSelectFilterSuit}>Diamonds</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Heart" onSelect={this.onSelectFilterSuit}>Hearts</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Spade" onSelect={this.onSelectFilterSuit}>Spades</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Club" onSelect={this.onSelectFilterSuit}>Clubs</Nav.Link></Nav.Item>
+              </Nav>
 
-        <Nav className="nav" variant="pills" >
-          <p>Description Filter:</p>
-          <Nav.Item><Nav.Link eventKey="All" onSelect={this.onSelectFilterDesc}>All</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Two" onSelect={this.onSelectFilterDesc}>Two</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Three" onSelect={this.onSelectFilterDesc}>Three</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Four" onSelect={this.onSelectFilterDesc}>Four</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Five" onSelect={this.onSelectFilterDesc}>Five</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Six" onSelect={this.onSelectFilterDesc}>Six</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Seven" onSelect={this.onSelectFilterDesc}>Seven</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Eight" onSelect={this.onSelectFilterDesc}>Eight</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Nine" onSelect={this.onSelectFilterDesc}>Nine</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Ten" onSelect={this.onSelectFilterDesc}>Ten</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Jack" onSelect={this.onSelectFilterDesc}>Jack</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Queen" onSelect={this.onSelectFilterDesc}>Queen</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="King" onSelect={this.onSelectFilterDesc}>King</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Ace" onSelect={this.onSelectFilterDesc}>Ace</Nav.Link></Nav.Item>
-        </Nav>
-
-        <Nav className="nav">
-          <p>Suit Filter:</p>
-          <Nav.Item><Nav.Link eventKey="All" onSelect={this.onSelectFilterSuit}>All</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Diamond" onSelect={this.onSelectFilterSuit}>Diamonds</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Heart" onSelect={this.onSelectFilterSuit}>Hearts</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Spade" onSelect={this.onSelectFilterSuit}>Spades</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Club" onSelect={this.onSelectFilterSuit}>Clubs</Nav.Link></Nav.Item>
-        </Nav>
-
-        <Nav className="nav">
-          <p>Color Filter:</p>
-          <Nav.Item><Nav.Link eventKey="All" onSelect={this.onSelectFilterColor}>All</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Red" onSelect={this.onSelectFilterColor}>Red</Nav.Link></Nav.Item>
-          <Nav.Item><Nav.Link eventKey="Black" onSelect={this.onSelectFilterColor}>Black</Nav.Link></Nav.Item>
-        </Nav>
+              <Nav className="nav">
+                <p>Color Filter:</p>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="All" onSelect={this.onSelectFilterColor}>All</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Red" onSelect={this.onSelectFilterColor}>Red</Nav.Link></Nav.Item>
+                <Nav.Item className="nav-item"><Nav.Link eventKey="Black" onSelect={this.onSelectFilterColor}>Black</Nav.Link></Nav.Item>
+              </Nav>
 
 
-        <DropdownButton title="Sort">
-          <Dropdown.Item eventKey="None" onSelect={this.onSelectSort}>None</Dropdown.Item>
-          <Dropdown.Item eventKey="increasing" onSelect={this.onSelectSort}>Lowest to Highest</Dropdown.Item>
-          <Dropdown.Item eventKey="decreasing" onSelect={this.onSelectSort}>Highest to Lowest</Dropdown.Item>
-        </DropdownButton>
+            </div>
+            <div className="dropdown">
+              <DropdownButton className="b1" title="Sort">
+                <Dropdown.Item eventKey="None" onSelect={this.onSelectSort} className="dropdown-item">None</Dropdown.Item>
+                <Dropdown.Item eventKey="increasing" onSelect={this.onSelectSort} className="dropdown-item">Lowest to Highest</Dropdown.Item>
+                <Dropdown.Item eventKey="decreasing" onSelect={this.onSelectSort} className="dropdown-item">Highest to Lowest</Dropdown.Item>
+              </DropdownButton>
+            </div>
 
-        <button onClick={this.removeChanges}>Remove Filters and Sort</button>
+          </div>
 
-        <button onClick={this.shuffleDeck}>Shuffle Deck</button>
+          <div className="changing-buttons">
+            <button onClick={this.removeChanges}>Remove Filters and Sort</button>
 
-        <DisplayList list={this.props.list.filter(this.matchesFilter).sort(this.matchesSort)} addToHand={this.addToHand} />
+            <button onClick={this.shuffleDeck}>Shuffle Deck</button>
+
+          </div>
+
+          <div>
+            <DisplayList list={this.props.list.filter(this.matchesFilter).sort(this.matchesSort)} addToHand={this.props.addToHand} />
+          </div>
+
+        </div>
       </div>
     );
   }

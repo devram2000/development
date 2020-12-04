@@ -15,7 +15,8 @@ export default class App extends React.Component {
 
     this.state =
     {
-      cards: this.initialize_cards()
+      cards: this.initialize_cards(),
+      hand: []
     }
 
   }
@@ -39,6 +40,29 @@ export default class App extends React.Component {
       cards: this.initialize_cards()
     })
   }
+
+  isInHand = item => {
+    return !this.state.hand.includes(item)
+  }
+
+  removeFromHand = (card) => {
+    this.setState({
+      hand: this.state.hand.filter((c) => c !== card)
+    })
+  }
+
+  addToHand = (card) => {
+    this.setState({
+      hand: [...this.state.hand, card]
+    })
+  }
+
+  resetHand = () => {
+    this.setState({
+      hand: []
+    })
+  }
+
 
   /* 
 
@@ -77,9 +101,9 @@ export default class App extends React.Component {
   render() {
     return (
       <div>
-        <h1>Card Hand Accumulator</h1>
-        <h2>Click on a card to move it to/from your hand!</h2>
-        <AlteredList list={this.state.cards} shuffle={this.shuffle}/>
+        <h4>Card Hand Accumulator: Click on a card to move it to/from your hand!</h4>
+        <AlteredList list={this.state.cards} shuffle={this.shuffle} hand={this.state.hand}
+        isInHand={this.isInHand} removeFromHand={this.removeFromHand} addToHand={this.addToHand} resetHand={this.resetHand}/>
       </div>
     );
   }
