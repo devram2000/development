@@ -7,6 +7,7 @@ import DisplayHand from "./DisplayHand.jsx";
 
 /* 
 
+Handles interactions between the DisplayList and DisplayHand components and the App component
 
  */
 
@@ -25,7 +26,7 @@ export default class AlteredList extends React.Component {
 
   /* 
 
-
+  Changes filter value for the suit state variable
 
   */
 
@@ -37,8 +38,10 @@ export default class AlteredList extends React.Component {
 
 
   /* 
-
-  */
+ 
+   Changes filter value for the description state variable
+ 
+   */
 
   onSelectFilterDesc = event => {
     this.setState({
@@ -47,6 +50,8 @@ export default class AlteredList extends React.Component {
   };
 
   /* 
+
+  Changes filter value for the color state variable
 
   */
 
@@ -59,6 +64,8 @@ export default class AlteredList extends React.Component {
 
   /* 
 
+  Changes sort value for the sort state variable
+
   */
 
   onSelectSort = event => {
@@ -68,42 +75,11 @@ export default class AlteredList extends React.Component {
   };
 
   /* 
-  
-  
-  */
-
-  matchesFilterSuit = item => {
-    // all items should be shown when no filter is selected
-    if (this.state.suit === "All") {
-      return true
-    } else if (this.state.suit === item.suit) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-  matchesFilterDesc = item => {
-    // all items should be shown when no filter is selected
-    if (this.state.description === "All") {
-      return true
-    } else if (this.state.description === item.description) {
-      return true
-    } else {
-      return false
-    }
-  }
-
-  matchesFilterColor = item => {
-    // all items should be shown when no filter is selected
-    if (this.state.color === "All") {
-      return true
-    } else if (this.state.color === item.color) {
-      return true
-    } else {
-      return false
-    }
-  }
+ 
+   Takes a state and an item_state and returns a boolean for the
+   filter value of that item of the .filter function.
+ 
+   */
 
   filterChecker = (state, item_state) => {
     if (state === "All") {
@@ -115,10 +91,25 @@ export default class AlteredList extends React.Component {
     }
   }
 
+  /* 
+
+ Uses the filterChecker function to ensure that the item passes the suit, description, and color
+ filters that are currently applied, checks that the card is not in the hand,
+  and returns a boolean value for the filter value of that item of the .filter function.
+
+ */
+
   matchesFilter = item => {
     return this.filterChecker(this.state.suit, item.suit) && this.filterChecker(this.state.description, item.description) && this.filterChecker(this.state.color, item.color) && this.props.isInHand(item)
   }
 
+
+  /* 
+
+ Takes two items and returns a value representing the sorting preferences for the
+ current state of the .sort function.
+
+ */
   matchesSort = (item1, item2) => {
     if (this.state.sort === "None") {
       return 0
@@ -129,6 +120,12 @@ export default class AlteredList extends React.Component {
     }
   }
 
+  /* 
+
+ Sets the filter and sort values back to default.
+
+ */
+
   removeChanges = () => {
     this.setState({
       suit: "All",
@@ -137,6 +134,14 @@ export default class AlteredList extends React.Component {
       sort: "None"
     })
   }
+
+
+  /* 
+
+  Sets the filter and sort values back to default using remove changes,
+  and calls the shuffle function in the props to shuffle the deck.
+
+  */
 
   shuffleDeck = () => {
     this.removeChanges()
@@ -148,12 +153,14 @@ export default class AlteredList extends React.Component {
     return (
       <div className="main-row">
         <div className="main-hand">
+          {/* DisplayHand Component for Hand */}
           <DisplayHand hand={this.props.hand} removeFromHand={this.props.removeFromHand} resetHand={this.props.resetHand} />
         </div>
         <div>
           <div className="main-alter">
             <div className="main-column">
               <Nav className="nav" variant="pills" >
+                {/* Filter section for Card Description */}
                 <p>Description Filter:</p>
                 <Nav.Item className="nav-item"><Nav.Link eventKey="All" onSelect={this.onSelectFilterDesc}>All</Nav.Link></Nav.Item>
                 <Nav.Item className="nav-item"><Nav.Link eventKey="Two" onSelect={this.onSelectFilterDesc}>Two</Nav.Link></Nav.Item>
@@ -171,6 +178,7 @@ export default class AlteredList extends React.Component {
                 <Nav.Item className="nav-item"><Nav.Link eventKey="Ace" onSelect={this.onSelectFilterDesc}>Ace</Nav.Link></Nav.Item>
               </Nav>
 
+              {/* Filter section for Card Description */}
               <Nav className="nav">
                 <p>Suit Filter:</p>
                 <Nav.Item className="nav-item"><Nav.Link eventKey="All" onSelect={this.onSelectFilterSuit}>All</Nav.Link></Nav.Item>
@@ -180,6 +188,7 @@ export default class AlteredList extends React.Component {
                 <Nav.Item className="nav-item"><Nav.Link eventKey="Club" onSelect={this.onSelectFilterSuit}>Clubs</Nav.Link></Nav.Item>
               </Nav>
 
+              {/* Filter section for Card Color */}
               <Nav className="nav">
                 <p>Color Filter:</p>
                 <Nav.Item className="nav-item"><Nav.Link eventKey="All" onSelect={this.onSelectFilterColor}>All</Nav.Link></Nav.Item>
@@ -187,7 +196,7 @@ export default class AlteredList extends React.Component {
                 <Nav.Item className="nav-item"><Nav.Link eventKey="Black" onSelect={this.onSelectFilterColor}>Black</Nav.Link></Nav.Item>
               </Nav>
 
-
+              {/* Dropdown Button for Sort */}
             </div>
             <div className="dropdown">
               <DropdownButton className="b1" title="Sort">
@@ -200,13 +209,16 @@ export default class AlteredList extends React.Component {
           </div>
 
           <div className="changing-buttons">
+            {/* Button for Removing Filters and Sort */}
             <button onClick={this.removeChanges}>Remove Filters and Sort</button>
 
+            {/* Button for Removing Shuffling Deck */}
             <button onClick={this.shuffleDeck}>Shuffle Deck</button>
 
           </div>
 
           <div>
+            {/* DisplayList Component for Deck */}
             <DisplayList list={this.props.list.filter(this.matchesFilter).sort(this.matchesSort)} addToHand={this.props.addToHand} />
           </div>
 

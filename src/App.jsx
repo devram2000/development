@@ -35,15 +35,33 @@ export default class App extends React.Component {
     return initial_cards;
   }
 
+  /* 
+
+ Uses initialize_cards to set the card state to a new dek
+
+ */
+
   shuffle = () => {
     this.setState({
       cards: this.initialize_cards()
     })
   }
 
+
+  /* 
+
+ Checks whether the inputted item is in the hand array.
+
+ */
   isInHand = item => {
     return !this.state.hand.includes(item)
   }
+
+  /* 
+
+ Takes an input of a card and filters the hand list for occurrences of that card.
+
+ */
 
   removeFromHand = (card) => {
     this.setState({
@@ -51,12 +69,23 @@ export default class App extends React.Component {
     })
   }
 
+  /* 
+ 
+   Adds a card to the hand.
+ 
+   */
+
   addToHand = (card) => {
     this.setState({
       hand: [...this.state.hand, card]
     })
   }
 
+  /* 
+
+  Removes all of the cards in the hand.
+
+ */
   resetHand = () => {
     this.setState({
       hand: []
@@ -85,8 +114,10 @@ export default class App extends React.Component {
       cardColor = "Red";
     }
 
-    let key_value = { name: card.toString(), shortName: cardName, suit: card.suit, description: card.description,
-      color: cardColor, number: card.sort, img_src: card_image_url + cardName + ".png" };
+    let key_value = {
+      name: card.toString(), shortName: cardName, suit: card.suit, description: card.description,
+      color: cardColor, number: card.sort, img_src: card_image_url + cardName + ".png"
+    };
 
     return key_value;
   }
@@ -103,7 +134,7 @@ export default class App extends React.Component {
       <div>
         <h4>Card Hand Accumulator: Click on a card to move it to/from your hand!</h4>
         <AlteredList list={this.state.cards} shuffle={this.shuffle} hand={this.state.hand}
-        isInHand={this.isInHand} removeFromHand={this.removeFromHand} addToHand={this.addToHand} resetHand={this.resetHand}/>
+          isInHand={this.isInHand} removeFromHand={this.removeFromHand} addToHand={this.addToHand} resetHand={this.resetHand} />
       </div>
     );
   }
